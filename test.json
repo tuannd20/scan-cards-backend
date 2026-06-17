@@ -1,0 +1,653 @@
+{
+    "status": true,
+    "path": "/scan/scan-card",
+    "message": "Card scanned successfully",
+    "statusCode": 201,
+    "data": {
+        "cardName": "Charizard",
+        "rarity": "Rare",
+        "energy": "https://upload-services.limgrow.com/uploads/l-cross-003-fitness/80a61512-2dbf-47ce-a5ef-dd102a6bbd2e.png",
+        "artist": "Mitsuhiro Arita",
+        "year": "1999",
+        "type": "Pokemon",
+        "finish": "Holo",
+        "seriesExpansion": "Base",
+        "description": "Pokémon Power: Energy Burn As often as you like during your turn (before your attack), you may turn all Energy attached to Charizard into Fire Energy for the rest of the turn. This power can't be used if Charizard is Asleep, Confused, or Paralyzed.",
+        "currentPrice": "$249.99",
+        "predictedPrice": "$269.59",
+        "priceLink": "https://www.tcgplayer.com/product/42382/pokemon-base-set-charizard?page=1&Language=English",
+        "attacks": [
+            {
+                "name": "Fire Spin",
+                "damage": "100",
+                "description": "Discard 2 Energy cards attached to Charizard in order to use this attack.",
+                "energy": [
+                    "https://upload-services.limgrow.com/uploads/l-cross-003-fitness/80a61512-2dbf-47ce-a5ef-dd102a6bbd2e.png",
+                    "https://upload-services.limgrow.com/uploads/l-cross-003-fitness/80a61512-2dbf-47ce-a5ef-dd102a6bbd2e.png",
+                    "https://upload-services.limgrow.com/uploads/l-cross-003-fitness/80a61512-2dbf-47ce-a5ef-dd102a6bbd2e.png",
+                    "https://upload-services.limgrow.com/uploads/l-cross-003-fitness/80a61512-2dbf-47ce-a5ef-dd102a6bbd2e.png"
+                ],
+                "_id": "687467c6e05ba4f512ea401e"
+            }
+        ],
+        "hp": "120",
+        "weakness": "https://upload-services.limgrow.com/uploads/l-cross-003-fitness/81151e3e-71ff-4b53-a6e2-703adb9e214b.png",
+        "TCG-1month-prices": [
+            {
+                "price": "$347.22",
+                "date": "2026-03-02"
+            },
+            {
+                "price": "$354.13",
+                "date": "2026-03-09"
+            },
+            {
+                "price": "$367.39",
+                "date": "2026-03-16"
+            },
+            {
+                "price": "$367.39",
+                "date": "2026-03-24"
+            }
+        ],
+        "TCG-3month-prices": [
+            {
+                "price": "$326.88",
+                "date": "2025-12-29"
+            },
+            {
+                "price": "$327.29",
+                "date": "2026-01-05"
+            },
+            {
+                "price": "$331.32",
+                "date": "2026-01-19"
+            },
+            {
+                "price": "$342.47",
+                "date": "2026-02-16"
+            },
+            {
+                "price": "$347.22",
+                "date": "2026-03-02"
+            },
+            {
+                "price": "$354.13",
+                "date": "2026-03-09"
+            },
+            {
+                "price": "$367.39",
+                "date": "2026-03-16"
+            },
+            {
+                "price": "$367.39",
+                "date": "2026-03-24"
+            }
+        ],
+        "TCG-6month-prices": [
+            {
+                "price": "$304.88",
+                "date": "2025-10-06"
+            },
+            {
+                "price": "$311.25",
+                "date": "2025-10-20"
+            },
+            {
+                "price": "$319.20",
+                "date": "2025-10-27"
+            },
+            {
+                "price": "$322.28",
+                "date": "2025-11-10"
+            },
+            {
+                "price": "$320.89",
+                "date": "2025-11-24"
+            },
+            {
+                "price": "$323.59",
+                "date": "2025-12-15"
+            },
+            {
+                "price": "$326.88",
+                "date": "2025-12-29"
+            },
+            {
+                "price": "$331.32",
+                "date": "2026-01-19"
+            },
+            {
+                "price": "$342.47",
+                "date": "2026-02-16"
+            },
+            {
+                "price": "$347.22",
+                "date": "2026-03-02"
+            },
+            {
+                "price": "$354.13",
+                "date": "2026-03-09"
+            },
+            {
+                "price": "$367.39",
+                "date": "2026-03-24"
+            }
+        ],
+        "TCG-1year-prices": [
+            {
+                "price": "$306.45",
+                "date": "2025-04-07"
+            },
+            {
+                "price": "$305.50",
+                "date": "2025-04-21"
+            },
+            {
+                "price": "$307.15",
+                "date": "2025-05-12"
+            },
+            {
+                "price": "$313.27",
+                "date": "2025-06-09"
+            },
+            {
+                "price": "$267.05",
+                "date": "2025-07-14"
+            },
+            {
+                "price": "$293.07",
+                "date": "2025-08-18"
+            },
+            {
+                "price": "$295.53",
+                "date": "2025-09-15"
+            },
+            {
+                "price": "$311.25",
+                "date": "2025-10-20"
+            },
+            {
+                "price": "$320.89",
+                "date": "2025-11-24"
+            },
+            {
+                "price": "$327.29",
+                "date": "2026-01-05"
+            },
+            {
+                "price": "$342.47",
+                "date": "2026-02-16"
+            },
+            {
+                "price": "$367.39",
+                "date": "2026-03-24"
+            }
+        ],
+        "TCG-all-prices": [
+            {
+                "price": "$306.45",
+                "date": "2025-04-07"
+            },
+            {
+                "price": "$305.50",
+                "date": "2025-04-21"
+            },
+            {
+                "price": "$307.15",
+                "date": "2025-05-12"
+            },
+            {
+                "price": "$313.27",
+                "date": "2025-06-09"
+            },
+            {
+                "price": "$267.05",
+                "date": "2025-07-14"
+            },
+            {
+                "price": "$293.07",
+                "date": "2025-08-18"
+            },
+            {
+                "price": "$295.53",
+                "date": "2025-09-15"
+            },
+            {
+                "price": "$311.25",
+                "date": "2025-10-20"
+            },
+            {
+                "price": "$320.89",
+                "date": "2025-11-24"
+            },
+            {
+                "price": "$327.29",
+                "date": "2026-01-05"
+            },
+            {
+                "price": "$342.47",
+                "date": "2026-02-16"
+            },
+            {
+                "price": "$367.39",
+                "date": "2026-03-24"
+            }
+        ],
+        "TCG-1month-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$258.25",
+                "date": "2026-03-30"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$263.00",
+                "date": "2026-04-05"
+            }
+        ],
+        "TCG-3month-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$262.50",
+                "date": "2026-05-01"
+            },
+            {
+                "price": "$264.00",
+                "date": "2026-06-01"
+            }
+        ],
+        "TCG-6month-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$262.80",
+                "date": "2026-07-01"
+            },
+            {
+                "price": "$264.00",
+                "date": "2026-09-01"
+            }
+        ],
+        "TCG-1year-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$263.20",
+                "date": "2026-06-15"
+            },
+            {
+                "price": "$264.00",
+                "date": "2026-10-30"
+            }
+        ],
+        "TCG-all-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$263.20",
+                "date": "2026-06-15"
+            },
+            {
+                "price": "$264.00",
+                "date": "2026-10-30"
+            }
+        ],
+        "CM-1month-prices": [
+            {
+                "price": "$350.10",
+                "date": "2026-03-02"
+            },
+            {
+                "price": "$351.80",
+                "date": "2026-03-09"
+            },
+            {
+                "price": "$369.95",
+                "date": "2026-03-16"
+            },
+            {
+                "price": "$365.40",
+                "date": "2026-03-24"
+            }
+        ],
+        "CM-3month-prices": [
+            {
+                "price": "$324.95",
+                "date": "2025-12-29"
+            },
+            {
+                "price": "$329.10",
+                "date": "2026-01-05"
+            },
+            {
+                "price": "$334.80",
+                "date": "2026-01-19"
+            },
+            {
+                "price": "$345.20",
+                "date": "2026-02-16"
+            },
+            {
+                "price": "$350.10",
+                "date": "2026-03-02"
+            },
+            {
+                "price": "$351.80",
+                "date": "2026-03-09"
+            },
+            {
+                "price": "$369.95",
+                "date": "2026-03-16"
+            },
+            {
+                "price": "$365.40",
+                "date": "2026-03-24"
+            }
+        ],
+        "CM-6month-prices": [
+            {
+                "price": "$307.10",
+                "date": "2025-10-06"
+            },
+            {
+                "price": "$308.90",
+                "date": "2025-10-20"
+            },
+            {
+                "price": "$321.80",
+                "date": "2025-10-27"
+            },
+            {
+                "price": "$319.95",
+                "date": "2025-11-10"
+            },
+            {
+                "price": "$318.70",
+                "date": "2025-11-24"
+            },
+            {
+                "price": "$326.40",
+                "date": "2025-12-15"
+            },
+            {
+                "price": "$324.95",
+                "date": "2025-12-29"
+            },
+            {
+                "price": "$334.80",
+                "date": "2026-01-19"
+            },
+            {
+                "price": "$345.20",
+                "date": "2026-02-16"
+            },
+            {
+                "price": "$350.10",
+                "date": "2026-03-02"
+            },
+            {
+                "price": "$351.80",
+                "date": "2026-03-09"
+            },
+            {
+                "price": "$365.40",
+                "date": "2026-03-24"
+            }
+        ],
+        "CM-1year-prices": [
+            {
+                "price": "$309.12",
+                "date": "2025-04-07"
+            },
+            {
+                "price": "$308.20",
+                "date": "2025-04-21"
+            },
+            {
+                "price": "$309.44",
+                "date": "2025-05-12"
+            },
+            {
+                "price": "$316.50",
+                "date": "2025-06-09"
+            },
+            {
+                "price": "$270.10",
+                "date": "2025-07-14"
+            },
+            {
+                "price": "$290.75",
+                "date": "2025-08-18"
+            },
+            {
+                "price": "$298.10",
+                "date": "2025-09-15"
+            },
+            {
+                "price": "$308.90",
+                "date": "2025-10-20"
+            },
+            {
+                "price": "$318.70",
+                "date": "2025-11-24"
+            },
+            {
+                "price": "$329.10",
+                "date": "2026-01-05"
+            },
+            {
+                "price": "$345.20",
+                "date": "2026-02-16"
+            },
+            {
+                "price": "$365.40",
+                "date": "2026-03-24"
+            }
+        ],
+        "CM-all-prices": [
+            {
+                "price": "$309.12",
+                "date": "2025-04-07"
+            },
+            {
+                "price": "$308.20",
+                "date": "2025-04-21"
+            },
+            {
+                "price": "$309.44",
+                "date": "2025-05-12"
+            },
+            {
+                "price": "$316.50",
+                "date": "2025-06-09"
+            },
+            {
+                "price": "$270.10",
+                "date": "2025-07-14"
+            },
+            {
+                "price": "$290.75",
+                "date": "2025-08-18"
+            },
+            {
+                "price": "$298.10",
+                "date": "2025-09-15"
+            },
+            {
+                "price": "$308.90",
+                "date": "2025-10-20"
+            },
+            {
+                "price": "$318.70",
+                "date": "2025-11-24"
+            },
+            {
+                "price": "$329.10",
+                "date": "2026-01-05"
+            },
+            {
+                "price": "$345.20",
+                "date": "2026-02-16"
+            },
+            {
+                "price": "$365.40",
+                "date": "2026-03-24"
+            }
+        ],
+        "CM-1month-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$258.25",
+                "date": "2026-03-30"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$263.00",
+                "date": "2026-04-05"
+            }
+        ],
+        "CM-3month-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$262.50",
+                "date": "2026-05-01"
+            },
+            {
+                "price": "$264.00",
+                "date": "2026-06-01"
+            }
+        ],
+        "CM-6month-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$262.80",
+                "date": "2026-07-01"
+            },
+            {
+                "price": "$264.00",
+                "date": "2026-09-01"
+            }
+        ],
+        "CM-1year-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$263.20",
+                "date": "2026-06-15"
+            },
+            {
+                "price": "$264.00",
+                "date": "2026-10-30"
+            }
+        ],
+        "CM-all-forecast-prices": [
+            {
+                "price": "$255.50",
+                "date": "2026-03-27"
+            },
+            {
+                "price": "$261.00",
+                "date": "2026-04-02"
+            },
+            {
+                "price": "$263.20",
+                "date": "2026-06-15"
+            },
+            {
+                "price": "$264.00",
+                "date": "2026-10-30"
+            }
+        ],
+        "gradedPrices": [
+            {
+                "grade": "PSA 10",
+                "price": "$280"
+            },
+            {
+                "grade": "PSA 9",
+                "price": "$265"
+            },
+            {
+                "grade": "PSA 8",
+                "price": "$260"
+            },
+            {
+                "grade": "UNGRADED",
+                "price": "$230"
+            }
+        ],
+        "buyLink": [
+            {
+                "Shop": "Ebay",
+                "link": "https://www.ebay.com/itm/327064466161?_skw=Charizard+base&itmmeta=01KMEVN1KRPVSZJT6598K3NHYV&hash=item4c268fb2f1:g:SzUAAeSwC4ZpwXZe&itmprp=enc%3AAQALAAAA8GfYFPkwiKCW4ZNSs2u11xDX8LPoCaxlxlvG6qnJt1VRBaCPVSea6Yo1Pr6A2PHvi3C04YC%2FUaHDnZ60KC3XWAXovsN0auWQGcWL5ue9ZQbkkurT5GOiKoeqbClDa4KxAF3Mwx65%2BhD3n5W6Di2uoqWUGrQzdTL%2BaTP02BAYtIfU9S4X3o42fUcP5r4HLpRnk1S96ye%2FT3zSzVJHMCk6j%2FQRVNkY2ilBm2rT6YEEEaibzluEYgVEE3KBOBT3%2B%2Fs2kceUU6JO8xEBtVSmqBQCAbeZCI7ODc84vlS5W6TDpipBC4CvKzX%2BX37IPbAq9jSXWw%3D%3D%7Ctkp%3ABk9SR4ia1NujZw"
+            },
+            {
+                "Shop": "Cardmarket",
+                "link": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Base-Set/Charizard-V1-BS4"
+            },
+            {
+                "Shop": "TCGPlayer",
+                "link": "https://www.tcgplayer.com/product/42382/pokemon-base-set-charizard?Language=English&page=1"
+            }
+        ]
+    },
+    "timestamp": "2026-03-24 09:02:50"
+}
