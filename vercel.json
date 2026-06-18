@@ -1,9 +1,16 @@
 {
   "version": 2,
+  "framework": null,
   "buildCommand": "npm run build",
   "functions": {
-    "src/main.ts": {
+    "api/index.ts": {
       "includeFiles": "node_modules/swagger-ui-dist/**"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
+    }
+  ]
 }
