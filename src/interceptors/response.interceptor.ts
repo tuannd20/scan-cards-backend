@@ -10,7 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { format } from 'date-fns';
 import { Reflector } from '@nestjs/core';
-import { RESPONSE_MESSAGE_METADATA } from 'src/decorators/response-message.decorator';
+import { RESPONSE_MESSAGE_METADATA } from '../decorators/response-message.decorator';
 
  
 export type Response<T> = {
