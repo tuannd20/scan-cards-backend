@@ -11,6 +11,13 @@ export async function createConfiguredApp(httpAdapter?: AbstractHttpAdapter) {
   const app = httpAdapter
     ? await NestFactory.create<NestExpressApplication>(AppModule, httpAdapter)
     : await NestFactory.create<NestExpressApplication>(AppModule);
+
+  configureApp(app);
+
+  return app;
+}
+
+export function configureApp(app: NestExpressApplication) {
   const reflector = app.get(Reflector);
 
   app.useGlobalInterceptors(new ResponseInterceptor(reflector));
@@ -28,6 +35,4 @@ export async function createConfiguredApp(httpAdapter?: AbstractHttpAdapter) {
   app.useStaticAssets(path.join(process.cwd(), 'uploads'), {
     prefix: '/uploads/',
   });
-
-  return app;
 }
