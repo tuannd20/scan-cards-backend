@@ -12,31 +12,43 @@ import { format } from 'date-fns';
 import { Reflector } from '@nestjs/core';
 import { RESPONSE_MESSAGE_METADATA } from '../decorators/response-message.decorator';
 
-export type Response<T> = {
-  status: boolean;
-  statusCode: number;
-  path: string;
+export type ApiResponse<T = unknown> = {
   message: string;
+  statusCode: number;
   data: T;
   timestamp: string;
 };
 
-type StandardResponseEnvelope<T = unknown> = Partial<Response<T>> & {
+type LegacyResponseEnvelope<T = unknown> = {
   status: boolean;
   statusCode: number;
   message: string;
   data: T;
+  path?: string;
+  timestamp?: string;
+};
+
+type PartialResponseEnvelope<T = unknown> = {
+  success: boolean;
+  data: T;
+  message?: string;
+};
+
+type UnwrappedPayload = {
+  payload: unknown;
+  message?: string;
 };
 
 @Injectable()
-export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
+export class ResponseInterceptor<T>
+  implements NestInterceptor<T, ApiResponse<T>>
+{
   constructor(private reflector: Reflector) {}
 
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<Response<T>> {
-    // If handler or class sets metadata 'skipResponse' true, bypass this interceptor
+  ): Observable<ApiResponse<T>> {
     const skipHandler = this.reflector.get<boolean>(
       'skipResponse',
       context.getHandler(),
@@ -57,9 +69,9 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
     );
   }
 
-  private isStandardResponseEnvelope(
+  private isLegacyResponseEnvelope(
     res: unknown,
-  ): res is StandardResponseEnvelope {
+  ): res is LegacyResponseEnvelope {
     if (!res || typeof res !== 'object' || Array.isArray(res)) {
       return false;
     }
@@ -74,17 +86,55 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
     );
   }
 
+  private isPartialResponseEnvelope(
+    res: unknown,
+  ): res is PartialResponseEnvelope {
+    if (!res || typeof res !== 'object' || Array.isArray(res)) {
+      return false;
+    }
+
+    const maybeEnvelope = res as Record<string, unknown>;
+
+    return (
+      typeof maybeEnvelope.success === 'boolean' &&
+      Object.prototype.hasOwnProperty.call(maybeEnvelope, 'data')
+    );
+  }
+
+  private unwrapPayload(res: unknown, maxDepth = 2): UnwrappedPayload {
+    let payload = res;
+    let extractedMessage: string | undefined;
+
+    for (let depth = 0; depth < maxDepth; depth++) {
+      if (this.isLegacyResponseEnvelope(payload)) {
+        extractedMessage = payload.message;
+        payload = payload.data;
+        continue;
+      }
+
+      if (this.isPartialResponseEnvelope(payload)) {
+        if (typeof payload.message === 'string') {
+          extractedMessage = payload.message;
+        }
+        payload = payload.data;
+        continue;
+      }
+
+      break;
+    }
+
+    return { payload, message: extractedMessage };
+  }
+
   errorHandler(exception: HttpException, context: ExecutionContext) {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse();
-    const request = ctx.getRequest();
 
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    // Lấy payload từ exception
     let responseBody: any =
       exception instanceof HttpException ? exception.getResponse() : null;
 
@@ -105,45 +155,28 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
     }
 
     response.status(status).json({
-      status: false,
-      statusCode: status,
-      path: request.url,
       message: responseBody.message || exception.message,
-      result: responseBody,
+      statusCode: status,
+      data: responseBody,
       timestamp: format(new Date().toISOString(), 'yyyy-MM-dd HH:mm:ss'),
     });
   }
 
-  responseHandler(res: any, context: ExecutionContext) {
+  responseHandler(res: unknown, context: ExecutionContext): ApiResponse<T> {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse();
-    const request = ctx.getRequest();
     const statusCode = response.statusCode;
     const timestamp = format(new Date().toISOString(), 'yyyy-MM-dd HH:mm:ss');
-    const message =
-      this.reflector.get<string>(
-        RESPONSE_MESSAGE_METADATA,
-        context.getHandler(),
-      ) || 'success';
-
-    if (this.isStandardResponseEnvelope(res)) {
-      return {
-        status: res.status,
-        path: request.url,
-        message: res.message,
-        statusCode: res.statusCode,
-        data: res.data,
-        timestamp:
-          typeof res.timestamp === 'string' ? res.timestamp : timestamp,
-      };
-    }
+    const customMessage = this.reflector.get<string>(
+      RESPONSE_MESSAGE_METADATA,
+      context.getHandler(),
+    );
+    const { payload, message: extractedMessage } = this.unwrapPayload(res);
 
     return {
-      status: true,
-      path: request.url,
-      message: message,
+      message: customMessage ?? extractedMessage ?? 'success',
       statusCode,
-      data: res,
+      data: payload as T,
       timestamp,
     };
   }

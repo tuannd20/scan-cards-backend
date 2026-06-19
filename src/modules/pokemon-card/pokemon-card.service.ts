@@ -334,18 +334,10 @@ export class PokemonCardService implements OnModuleInit {
       try {
         data = await this.loadPokemonCardsByLanguage(language ?? 'EN');
       } catch (err) {
-        // If loading fails, return a structured error response
         console.error('Failed to load language data:', err.message || err);
-        return {
-          status: false,
-          path: reqPath ?? `/get-all-recommended?language=${language ?? 'en'}`,
-          message:
-            err.message || 'Failed to load data file for requested language',
-          statusCode: 400,
-          data: {
-            data: [],
-          },
-        };
+        throw new Error(
+          err.message || 'Failed to load data file for requested language',
+        );
       }
 
       const allData = data?.data || [];
@@ -354,32 +346,17 @@ export class PokemonCardService implements OnModuleInit {
       const paginatedData = allData.slice((page - 1) * limit, page * limit);
 
       return {
-        status: true,
-        path: reqPath ?? `/get-all-recommended?language=${language ?? 'en'}`,
-        message: 'success',
-        statusCode: 200,
-        data: {
-          data: paginatedData,
-          pagination: {
-            total,
-            page: page.toString(),
-            limit: limit.toString(),
-            totalPages,
-          },
+        data: paginatedData,
+        pagination: {
+          total,
+          page: page.toString(),
+          limit: limit.toString(),
+          totalPages,
         },
-        timestamp: new Date().toISOString().replace('T', ' ').substr(0, 19),
       };
     } catch (error) {
       console.error(error);
-      return {
-        status: false,
-        path: reqPath ?? `/get-all-recommended?language=${language ?? 'en'}`,
-        message: error.message || 'Failed to load data',
-        statusCode: 400,
-        data: {
-          data: [],
-        },
-      };
+      throw error;
     }
   }
 

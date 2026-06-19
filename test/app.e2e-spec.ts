@@ -39,10 +39,12 @@ describe('AppController (e2e)', () => {
       .expect(400)
       .expect('Content-Type', /json/)
       .expect((response) => {
-        expect(response.body.status).toBe(false);
-        expect(response.body.path).toBe('/error');
         expect(response.body.message).toBe('Custom error occurred');
+        expect(response.body.statusCode).toBe(400);
+        expect(response.body.data).toBeDefined();
         expect(response.body.timestamp).toBeDefined();
+        expect(response.body.status).toBeUndefined();
+        expect(response.body.path).toBeUndefined();
       });
   });
 
@@ -52,11 +54,12 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .expect((response) => {
-        expect(response.body.status).toBe(true);
-        expect(response.body.path).toBe('/card-new/get-all?type=all&page=1&limit=1');
         expect(response.body.message).toBe('success');
+        expect(response.body.statusCode).toBe(200);
         expect(response.body.data).toBeDefined();
         expect(response.body.timestamp).toBeDefined();
+        expect(response.body.status).toBeUndefined();
+        expect(response.body.path).toBeUndefined();
       });
   });
 });

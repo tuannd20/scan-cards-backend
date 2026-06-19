@@ -31,16 +31,16 @@ describe('ResponseInterceptor', () => {
     const response = interceptor.responseHandler(payload, createContext());
 
     expect(response).toMatchObject({
-      status: true,
-      path: '/pokemon/trending?period=week&direction=both&minChangePercent=5&limit=20',
       message: 'success',
       statusCode: 200,
       data: payload,
     });
     expect(response.timestamp).toBeDefined();
+    expect(response).not.toHaveProperty('status');
+    expect(response).not.toHaveProperty('path');
   });
 
-  it('returns existing standard envelopes as one response level', () => {
+  it('unwraps legacy envelopes and returns one response level', () => {
     const interceptor = createInterceptor();
     const payload = {
       status: true,
@@ -60,9 +60,7 @@ describe('ResponseInterceptor', () => {
 
     const response = interceptor.responseHandler(payload, createContext());
 
-    expect(response).toEqual({
-      status: true,
-      path: '/pokemon/trending?period=week&direction=both&minChangePercent=5&limit=20',
+    expect(response).toMatchObject({
       message: 'success',
       statusCode: 200,
       data: {
@@ -73,26 +71,58 @@ describe('ResponseInterceptor', () => {
         total: 0,
         data: [],
       },
-      timestamp: '2026-06-18 08:54:07',
     });
     expect((response.data as Record<string, unknown>).status).toBeUndefined();
   });
 
-  it('uses the current request url when flattening an existing envelope', () => {
-    const interceptor = createInterceptor();
+  it('unwraps partial success envelopes', () => {
+    const interceptor = createInterceptor('Articles retrieved successfully');
+    const payload = {
+      success: true,
+      data: { items: [], total: 0 },
+    };
+
+    const response = interceptor.responseHandler(payload, createContext());
+
+    expect(response).toMatchObject({
+      message: 'Articles retrieved successfully',
+      statusCode: 200,
+      data: { items: [], total: 0 },
+    });
+  });
+
+  it('prefers custom message from decorator over extracted envelope message', () => {
+    const interceptor = createInterceptor('Custom message');
 
     const response = interceptor.responseHandler(
       {
-        status: true,
-        path: '/stale-path',
-        message: 'success',
-        statusCode: 200,
+        success: true,
+        message: 'Envelope message',
         data: { ok: true },
-        timestamp: '2026-06-18 08:54:07',
       },
-      createContext('/current-path?query=1'),
+      createContext(),
     );
 
-    expect(response.path).toBe('/current-path?query=1');
+    expect(response.message).toBe('Custom message');
+  });
+
+  it('unwraps double-wrapped legacy envelopes', () => {
+    const interceptor = createInterceptor();
+    const innerPayload = { period: 'today', total: 1, data: [{ id: 1 }] };
+    const payload = {
+      status: true,
+      statusCode: 200,
+      message: 'success',
+      data: {
+        status: true,
+        statusCode: 200,
+        message: 'success',
+        data: innerPayload,
+      },
+    };
+
+    const response = interceptor.responseHandler(payload, createContext());
+
+    expect(response.data).toEqual(innerPayload);
   });
 });

@@ -122,26 +122,12 @@ export class PokemonCardController {
       // pagination giữ nguyên
       const pagination = result.pagination;
       return {
-        status: true,
-        path: `/get-all?categories=${categories}${sport ? `&sport=${sport}` : ''}&page=${pagination.page}&limit=${pagination.limit}`,
-        message: 'success',
-        statusCode: 200,
-        data: {
-          allCards,
-          pagination,
-        },
-        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        allCards,
+        pagination,
       };
     }
 
-    return {
-      status: true,
-      path: `/pokemon-card/search?...`,
-      message: 'success',
-      statusCode: 200,
-      data: result,
-      timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
-    };
+    return result;
   }
 
   @Get('get-all')
@@ -196,26 +182,12 @@ export class PokemonCardController {
       // pagination giữ nguyên
       const pagination = result.pagination;
       return {
-        status: true,
-        path: `/get-all?categories=${categories}${sport ? `&sport=${sport}` : ''}&page=${pagination.page}&limit=${pagination.limit}`,
-        message: 'success',
-        statusCode: 200,
-        data: {
-          allCards,
-          pagination,
-        },
-        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        allCards,
+        pagination,
       };
     }
 
-    return {
-      status: true,
-      path: `/get-all?categories=${categories}${sport ? `&sport=${sport}` : ''}&page=${pageNumber}&limit=${limitNumber}`,
-      message: 'success',
-      statusCode: 200,
-      data: result,
-      timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
-    };
+    return result;
   }
 
   // @Get('get-all-recommended')
@@ -280,14 +252,7 @@ export class PokemonCardController {
       limit,
     });
 
-    return {
-      status: true,
-      path: `/pokemon/trending?period=${result.period}&direction=${result.direction}&limit=${result.limit}`,
-      message: 'success',
-      statusCode: 200,
-      data: result,
-      timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
-    };
+    return result;
   }
 
   @Get('pokemon/top-movers')
@@ -317,14 +282,7 @@ export class PokemonCardController {
       limit,
     });
 
-    return {
-      status: true,
-      path: `/pokemon/top-movers?period=${result.period}&direction=${result.direction}&limit=${result.limit}`,
-      message: 'success',
-      statusCode: 200,
-      data: result,
-      timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
-    };
+    return result;
   }
 
   // @Get('stats')

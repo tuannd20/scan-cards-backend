@@ -65,8 +65,6 @@ describe('PokemonCardController', () => {
     );
 
     expect(response).toMatchObject({
-      status: true,
-      path: '/pokemon/trending?period=week&direction=both&minChangePercent=5&limit=20',
       message: 'success',
       statusCode: 200,
       data: {
@@ -80,7 +78,6 @@ describe('PokemonCardController', () => {
     });
     expect(response.timestamp).toBeDefined();
     expect((response.data as Record<string, unknown>).status).toBeUndefined();
-    expect((response.data as Record<string, unknown>).path).toBeUndefined();
     expect((response.data as Record<string, unknown>).message).toBeUndefined();
     expect(
       (response.data as Record<string, unknown>).statusCode,
