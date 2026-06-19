@@ -61,7 +61,8 @@ export const SCAN_CARD_SUCCESS_EXAMPLE = wrapSuccess(
       {
         name: 'Thunder Shock',
         damage: '30',
-        description: 'Flip a coin. If heads, the Defending Pokemon is Paralyzed.',
+        description:
+          'Flip a coin. If heads, the Defending Pokemon is Paralyzed.',
       },
     ],
     cost: 0.00412,
@@ -81,7 +82,7 @@ export const SCAN_CARD_SUCCESS_EXAMPLE = wrapSuccess(
 );
 
 export const CATALOG_LIST_EXAMPLE = wrapSuccess(200, 'success', {
-  data: [
+  items: [
     {
       cardName: 'Charizard ex',
       cardNumber: '006/165',
@@ -99,7 +100,7 @@ export const CATALOG_LIST_EXAMPLE = wrapSuccess(200, 'success', {
 });
 
 export const CATALOG_SEARCH_EXAMPLE = wrapSuccess(200, 'success', {
-  data: [
+  items: [
     {
       cardName: 'Charizard ex',
       cardNumber: '006/165',
@@ -135,7 +136,7 @@ export const CATALOG_TRENDING_EXAMPLE = wrapSuccess(200, 'success', {
   minChangePercent: 5,
   limit: 20,
   total: 2,
-  data: [
+  items: [
     {
       cardName: 'Pikachu ex',
       cardNumber: '193/165',
@@ -151,7 +152,7 @@ export const CATALOG_TOP_MOVERS_EXAMPLE = wrapSuccess(200, 'success', {
   direction: 'gainers',
   limit: 10,
   total: 1,
-  data: [
+  items: [
     {
       cardName: 'Mew ex',
       cardNumber: '151/165',

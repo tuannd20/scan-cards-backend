@@ -50,7 +50,7 @@ describe('PokemonCardController', () => {
       minChangePercent: 5,
       limit: 20,
       total: 0,
-      data: [],
+      items: [],
     });
 
     const controllerResponse = await controller.getTrendingCards(
@@ -73,7 +73,7 @@ describe('PokemonCardController', () => {
         minChangePercent: 5,
         limit: 20,
         total: 0,
-        data: [],
+        items: [],
       },
     });
     expect(response.timestamp).toBeDefined();

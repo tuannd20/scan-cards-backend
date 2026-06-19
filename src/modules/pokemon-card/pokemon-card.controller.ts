@@ -29,7 +29,7 @@ export class PokemonCardController {
   @ApiOperation({
     summary: 'Search cards in the catalog by category',
     description:
-      'Returns matching cards with pagination. Pokemon responses use `{ data, pagination, sort? }`. Sport responses may use `{ allCards, pagination }`.',
+      'Returns matching cards with pagination. Responses use `{ items, pagination, sort? }`.',
   })
   @ApiCatalogReadResponses({
     description: 'Search results retrieved successfully',
@@ -117,15 +117,9 @@ export class PokemonCardController {
       filters,
     );
 
-    // // Thêm log để kiểm tra dữ liệu trả về từ service
-    // console.log('[SEARCH] result.data:', JSON.stringify(result.data, null, 2));
-    // console.log('[SEARCH] result.pagination:', result.pagination);
-    // Chuẩn hóa allCards cho sport
-    let allCards: any[] = [];
-    let pagination = result.pagination;
-    if (categories === 'sport' && result.data) {
-      // Chuẩn hóa allCards: chỉ trả về các trường FE cần thiết cho từng card
-      const allCards = result.data.map((card) => ({
+    // Chuẩn hóa items cho sport
+    if (categories === 'sport' && result.items) {
+      const items = result.items.map((card) => ({
         name: card.playerName || card.player || card.name,
         cardType: 'sport',
         matchedName: card.playerName || card.player || card.name,
@@ -137,11 +131,10 @@ export class PokemonCardController {
         description: card.description,
         sport: card.sport,
       }));
-      // pagination giữ nguyên
-      const pagination = result.pagination;
       return {
-        allCards,
-        pagination,
+        items,
+        pagination: result.pagination,
+        ...(result.sort ? { sort: result.sort } : {}),
       };
     }
 
@@ -152,7 +145,7 @@ export class PokemonCardController {
   @ApiOperation({
     summary: 'List cards in the catalog by category',
     description:
-      'Returns paginated cards for the selected category. Pokemon responses use `{ data, pagination }`. Sport responses may use `{ allCards, pagination }`.',
+      'Returns paginated cards for the selected category. Responses use `{ items, pagination }`.',
   })
   @ApiCatalogReadResponses({
     description: 'Catalog list retrieved successfully',
@@ -186,15 +179,9 @@ export class PokemonCardController {
       sport,
     );
 
-    // Thêm log để kiểm tra dữ liệu trả về từ service
-    // console.log('[GET-ALL] result.data:', JSON.stringify(result.data, null, 2));
-    // console.log('[GET-ALL] result.pagination:', result.pagination);
-    // Chuẩn hóa allCards cho sport
-    let allCards: any[] = [];
-    let pagination = result.pagination;
-    if (categories === 'sport' && result.data) {
-      // Chuẩn hóa allCards: chỉ trả về các trường FE cần thiết cho từng card
-      const allCards = result.data.map((card) => ({
+    // Chuẩn hóa items cho sport
+    if (categories === 'sport' && result.items) {
+      const items = result.items.map((card) => ({
         name: card.playerName || card.player || card.name,
         cardType: 'sport',
         matchedName: card.playerName || card.player || card.name,
@@ -206,11 +193,9 @@ export class PokemonCardController {
         description: card.description,
         sport: card.sport,
       }));
-      // pagination giữ nguyên
-      const pagination = result.pagination;
       return {
-        allCards,
-        pagination,
+        items,
+        pagination: result.pagination,
       };
     }
 

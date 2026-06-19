@@ -191,7 +191,7 @@ export class PokemonCardService implements OnModuleInit {
       sport?: string[];
     },
   ): Promise<{
-    data: any[];
+    items: any[];
     pagination: {
       total: number;
       page: number;
@@ -266,7 +266,7 @@ export class PokemonCardService implements OnModuleInit {
       const endIndex = startIndex + limit;
       const paginatedCards = allCards.slice(startIndex, endIndex);
       return {
-        data: paginatedCards,
+        items: paginatedCards,
         pagination: {
           total,
           page,
@@ -311,7 +311,7 @@ export class PokemonCardService implements OnModuleInit {
       const endIndex = startIndex + limit;
       const paginatedCards = allCards.slice(startIndex, endIndex);
       return {
-        data: paginatedCards,
+        items: paginatedCards,
         pagination: {
           total,
           page,
@@ -346,7 +346,7 @@ export class PokemonCardService implements OnModuleInit {
       const paginatedData = allData.slice((page - 1) * limit, page * limit);
 
       return {
-        data: paginatedData,
+        items: paginatedData,
         pagination: {
           total,
           page: page.toString(),
@@ -379,7 +379,7 @@ export class PokemonCardService implements OnModuleInit {
     const paginatedData = filteredData.slice(startIndex, endIndex);
 
     return {
-      data: paginatedData,
+      items: paginatedData,
       pagination: {
         total,
         page,
@@ -444,7 +444,7 @@ export class PokemonCardService implements OnModuleInit {
       sport?: string[];
     },
   ): {
-    data: any[];
+    items: any[];
     pagination: {
       total: number;
       page: string;
@@ -490,7 +490,7 @@ export class PokemonCardService implements OnModuleInit {
     const paginatedData = filteredData.slice(startIndex, endIndex);
 
     return {
-      data: paginatedData,
+      items: paginatedData,
       pagination: {
         total,
         page: String(page),
@@ -602,15 +602,16 @@ export class PokemonCardService implements OnModuleInit {
     limit?: unknown;
   }) {
     const options = buildTrendingQueryOptions(query);
-    const data = await this.pokemonCardCatalogService.getTrendingCards(options);
+    const items =
+      await this.pokemonCardCatalogService.getTrendingCards(options);
 
     return {
       period: options.period,
       direction: options.direction,
       minChangePercent: options.minChangePercent,
       limit: options.limit,
-      total: data.length,
-      data,
+      total: items.length,
+      items,
     };
   }
 
@@ -620,14 +621,14 @@ export class PokemonCardService implements OnModuleInit {
     limit?: unknown;
   }) {
     const options = buildTopMoversQueryOptions(query);
-    const data = await this.pokemonCardCatalogService.getTopMovers(options);
+    const items = await this.pokemonCardCatalogService.getTopMovers(options);
 
     return {
       period: options.period,
       direction: options.direction,
       limit: options.limit,
-      total: data.length,
-      data,
+      total: items.length,
+      items,
     };
   }
 

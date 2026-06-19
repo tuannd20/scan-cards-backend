@@ -50,7 +50,7 @@ export class PokemonCardCatalogService {
     ]);
 
     return {
-      data: docs.map((doc) => toLegacyCardResponse(doc)),
+      items: docs.map((doc) => toLegacyCardResponse(doc)),
       pagination: {
         total,
         page,
@@ -82,7 +82,7 @@ export class PokemonCardCatalogService {
     ]);
 
     return {
-      data: docs.map((doc) => toLegacyCardResponse(doc)),
+      items: docs.map((doc) => toLegacyCardResponse(doc)),
       pagination: {
         total,
         page,
@@ -119,7 +119,9 @@ export class PokemonCardCatalogService {
     return [...new Set(sorted)];
   }
 
-  async getTrendingCards(options: TrendingQueryOptions): Promise<PriceMoverItem[]> {
+  async getTrendingCards(
+    options: TrendingQueryOptions,
+  ): Promise<PriceMoverItem[]> {
     const pipeline = this.buildPriceMoverPipeline(options.period);
 
     if (options.direction === 'up') {
@@ -134,13 +136,18 @@ export class PokemonCardCatalogService {
       });
     }
 
-    pipeline.push({ $sort: { absChangePercent: -1 } }, { $limit: options.limit });
+    pipeline.push(
+      { $sort: { absChangePercent: -1 } },
+      { $limit: options.limit },
+    );
 
     const docs = await this.pokemonCardModel.aggregate(pipeline).exec();
     return docs.map((doc) => mapPriceMoverItem(doc, options.period));
   }
 
-  async getTopMovers(options: TopMoversQueryOptions): Promise<PriceMoverItem[]> {
+  async getTopMovers(
+    options: TopMoversQueryOptions,
+  ): Promise<PriceMoverItem[]> {
     const pipeline = this.buildPriceMoverPipeline(options.period);
 
     if (options.direction === 'gainers') {

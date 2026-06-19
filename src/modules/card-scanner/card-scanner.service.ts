@@ -333,7 +333,10 @@ HÃY ĐỌC TÊN CHÍNH XÁC TỪNH ẢNH:`;
         'pokemon',
       );
 
-      if (!pokemonSearchResult.data || pokemonSearchResult.data.length === 0) {
+      if (
+        !pokemonSearchResult.items ||
+        pokemonSearchResult.items.length === 0
+      ) {
         return { found: false };
       }
 
@@ -341,7 +344,7 @@ HÃY ĐỌC TÊN CHÍNH XÁC TỪNH ẢNH:`;
       let bestSimilarity = 0;
       let detailedMatches: any[] = [];
 
-      for (const card of pokemonSearchResult.data) {
+      for (const card of pokemonSearchResult.items) {
         // Base name similarity
         let similarity = stringSimilarity.compareTwoStrings(
           cardTitle.toLowerCase(),
@@ -592,7 +595,7 @@ HÃY ĐỌC TÊN CHÍNH XÁC TỪNH ẢNH:`;
         20,
         'sport',
       );
-      if (!sportSearchResult.data || sportSearchResult.data.length === 0) {
+      if (!sportSearchResult.items || sportSearchResult.items.length === 0) {
         // this.logger.warn(`[SPORT-SEARCH] No sport cards found for title: ${cardTitle}`);
         return { found: false };
       }
@@ -600,7 +603,7 @@ HÃY ĐỌC TÊN CHÍNH XÁC TỪNH ẢNH:`;
       let bestMatch: any = null;
       let bestSimilarity = 0;
 
-      for (const playerGroup of sportSearchResult.data) {
+      for (const playerGroup of sportSearchResult.items) {
         const playerName =
           playerGroup.player || playerGroup.playerName || playerGroup.name;
         const similarity =
@@ -673,8 +676,8 @@ HÃY ĐỌC TÊN CHÍNH XÁC TỪNH ẢNH:`;
         100,
         'pokemon',
       ); // Tăng từ 20 lên 100
-      if (pokemonSearchResult.data && pokemonSearchResult.data.length > 0) {
-        for (const card of pokemonSearchResult.data) {
+      if (pokemonSearchResult.items && pokemonSearchResult.items.length > 0) {
+        for (const card of pokemonSearchResult.items) {
           let similarity = stringSimilarity.compareTwoStrings(
             cardTitle.toLowerCase(),
             (card.name || '').toLowerCase(),
@@ -775,8 +778,8 @@ HÃY ĐỌC TÊN CHÍNH XÁC TỪNH ẢNH:`;
         50,
         'sport',
       ); // Tăng từ 20 lên 50
-      if (sportSearchResult.data && sportSearchResult.data.length > 0) {
-        for (const playerGroup of sportSearchResult.data) {
+      if (sportSearchResult.items && sportSearchResult.items.length > 0) {
+        for (const playerGroup of sportSearchResult.items) {
           // Check player name similarity
           const playerSimilarity = stringSimilarity.compareTwoStrings(
             cardTitle.toLowerCase(),
