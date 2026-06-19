@@ -8,12 +8,14 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AppService } from './app.service';
+import { ApiExcludeEndpoint } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  @ApiExcludeEndpoint()
   @SetMetadata('skipResponse', true)
   getApiDocs(@Res({ passthrough: true }) response: Response): string {
     const result = this.appService.getApiDocsHtml();
@@ -24,6 +26,7 @@ export class AppController {
   }
 
   @Get('/error')
+  @ApiExcludeEndpoint()
   throwError(): string {
     throw new HttpException('Custom error occurred', HttpStatus.BAD_REQUEST);
   }

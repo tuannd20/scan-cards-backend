@@ -1,6 +1,6 @@
 {
   "status": true,
-  "path": "/card-new/grade-card",
+  "path": "/easy-card-scanner/cards/grades",
   "message": "Card graded successfully",
   "statusCode": 201,
   "data": {

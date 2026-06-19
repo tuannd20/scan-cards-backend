@@ -28,7 +28,7 @@ describe('AppController (e2e)', () => {
       .expect('Content-Type', /text\/html/);
 
     expect(response.text).toContain('Postman cURL Mapping');
-    expect(response.text).toContain('/card-new/scan-card');
+    expect(response.text).toContain('/easy-card-scanner/cards/scans');
     expect(response.text).not.toContain('"status":true');
     expect(response.text).not.toContain('"timestamp"');
   });
@@ -48,9 +48,9 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('/card-new/get-all (GET) still returns wrapped JSON success', () => {
+  it('/easy-card-scanner/cards (GET) still returns wrapped JSON success', () => {
     return request(app.getHttpServer())
-      .get('/card-new/get-all?type=all&page=1&limit=1')
+      .get('/easy-card-scanner/cards?type=all&page=1&limit=1')
       .expect(200)
       .expect('Content-Type', /json/)
       .expect((response) => {

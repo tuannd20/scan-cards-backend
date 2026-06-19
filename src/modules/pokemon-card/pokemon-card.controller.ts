@@ -9,14 +9,32 @@ import {
   Query,
 } from '@nestjs/common';
 import { PokemonCardService } from './pokemon-card.service';
-import { ApiQuery } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { buildPokemonSearchQueryOptions } from '../pokemon-card-catalog/helpers/search-query.helper';
+import {
+  CATALOG_LIST_EXAMPLE,
+  CATALOG_SEARCH_EXAMPLE,
+  CATALOG_STATS_EXAMPLE,
+  CATALOG_TOP_MOVERS_EXAMPLE,
+  CATALOG_TRENDING_EXAMPLE,
+} from '../../common/swagger/api-envelope.examples';
+import { ApiCatalogReadResponses } from '../../common/swagger/api-standard-responses.decorator';
 
-@Controller('')
+@ApiTags('Easy Card Scanner - Catalog')
+@Controller('easy-card-scanner/catalog')
 export class PokemonCardController {
   constructor(private readonly pokemonCardService: PokemonCardService) {}
 
-  @Get('search')
+  @Get('cards/search')
+  @ApiOperation({
+    summary: 'Search cards in the catalog by category',
+    description:
+      'Returns matching cards with pagination. Pokemon responses use `{ data, pagination, sort? }`. Sport responses may use `{ allCards, pagination }`.',
+  })
+  @ApiCatalogReadResponses({
+    description: 'Search results retrieved successfully',
+    example: CATALOG_SEARCH_EXAMPLE,
+  })
   @ApiQuery({
     name: 'search',
     required: false,
@@ -130,7 +148,16 @@ export class PokemonCardController {
     return result;
   }
 
-  @Get('get-all')
+  @Get('cards')
+  @ApiOperation({
+    summary: 'List cards in the catalog by category',
+    description:
+      'Returns paginated cards for the selected category. Pokemon responses use `{ data, pagination }`. Sport responses may use `{ allCards, pagination }`.',
+  })
+  @ApiCatalogReadResponses({
+    description: 'Catalog list retrieved successfully',
+    example: CATALOG_LIST_EXAMPLE,
+  })
   @ApiQuery({
     name: 'categories',
     required: true,
@@ -213,12 +240,22 @@ export class PokemonCardController {
   //   return this.pokemonCardService.getSportStats();
   // }
 
-  @Get('pokemon-stats')
+  @Get('stats')
+  @ApiOperation({ summary: 'Get catalog statistics' })
+  @ApiCatalogReadResponses({
+    description: 'Catalog statistics retrieved successfully',
+    example: CATALOG_STATS_EXAMPLE,
+  })
   async getPokemonStats() {
     return this.pokemonCardService.getPokemonStats();
   }
 
-  @Get('pokemon/trending')
+  @Get('cards/trending')
+  @ApiOperation({ summary: 'Get trending cards by price movement' })
+  @ApiCatalogReadResponses({
+    description: 'Trending cards retrieved successfully',
+    example: CATALOG_TRENDING_EXAMPLE,
+  })
   @ApiQuery({
     name: 'period',
     required: false,
@@ -255,7 +292,12 @@ export class PokemonCardController {
     return result;
   }
 
-  @Get('pokemon/top-movers')
+  @Get('cards/top-movers')
+  @ApiOperation({ summary: 'Get top price gainers or losers in the catalog' })
+  @ApiCatalogReadResponses({
+    description: 'Top movers retrieved successfully',
+    example: CATALOG_TOP_MOVERS_EXAMPLE,
+  })
   @ApiQuery({
     name: 'period',
     required: false,

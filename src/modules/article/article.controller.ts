@@ -10,7 +10,13 @@ import {
   HttpStatus,
   HttpException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiQuery,
+  ApiExcludeEndpoint,
+} from '@nestjs/swagger';
 import {
   ArticleService,
   ArticleFilter,
@@ -18,6 +24,15 @@ import {
 } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { ResponseMessage } from '../../decorators/response-message.decorator';
+import {
+  ARTICLE_DETAIL_EXAMPLE,
+  ARTICLES_LIST_EXAMPLE,
+} from '../../common/swagger/api-envelope.examples';
+import {
+  ApiWrappedErrorResponse,
+  ApiWrappedInternalServerErrorResponse,
+  ApiWrappedOkResponse,
+} from '../../common/swagger/api-standard-responses.decorator';
 
 @ApiTags('Articles')
 @Controller('articles')
@@ -25,6 +40,7 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post()
+  @ApiExcludeEndpoint()
   @ApiOperation({ summary: 'Create a new article manually' })
   @ApiResponse({ status: 201, description: 'Article created successfully' })
   @ResponseMessage('Article created successfully')
@@ -45,6 +61,15 @@ export class ArticleController {
 
   @Get()
   @ApiOperation({ summary: 'Get all articles with pagination and filtering' })
+  @ApiWrappedOkResponse({
+    description: 'Articles retrieved successfully',
+    example: ARTICLES_LIST_EXAMPLE,
+  })
+  @ApiWrappedErrorResponse({
+    status: 400,
+    message: 'Invalid articles query',
+  })
+  @ApiWrappedInternalServerErrorResponse()
   @ApiQuery({
     name: 'type',
     required: false,
@@ -103,7 +128,15 @@ export class ArticleController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a single article by ID' })
-  @ApiResponse({ status: 200, description: 'Article retrieved successfully' })
+  @ApiWrappedOkResponse({
+    description: 'Article retrieved successfully',
+    example: ARTICLE_DETAIL_EXAMPLE,
+  })
+  @ApiWrappedErrorResponse({
+    status: 404,
+    message: 'Article not found',
+  })
+  @ApiWrappedInternalServerErrorResponse()
   @ResponseMessage('Article retrieved successfully')
   async findOne(@Param('id') id: string, @Query('language') language?: string) {
     try {
@@ -121,6 +154,7 @@ export class ArticleController {
   }
 
   @Patch(':id')
+  @ApiExcludeEndpoint()
   @ApiOperation({ summary: 'Update an article' })
   @ApiResponse({ status: 200, description: 'Article updated successfully' })
   @ResponseMessage('Article updated successfully')
@@ -143,6 +177,7 @@ export class ArticleController {
   }
 
   @Delete(':id')
+  @ApiExcludeEndpoint()
   @ApiOperation({ summary: 'Delete an article (soft delete)' })
   @ApiResponse({ status: 200, description: 'Article deleted successfully' })
   @ResponseMessage('Article deleted successfully')
@@ -162,6 +197,7 @@ export class ArticleController {
   }
 
   @Delete()
+  @ApiExcludeEndpoint()
   @ApiOperation({ summary: 'Delete all articles (hard delete)' })
   @ApiResponse({
     status: 200,

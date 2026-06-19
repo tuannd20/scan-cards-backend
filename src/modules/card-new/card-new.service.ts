@@ -93,10 +93,31 @@ interface FullScanCardPayload {
   buyLink: BuyLinkPayload[];
 }
 
+interface OpenRouterCallUsage {
+  step: string;
+  cost: number;
+  inputToken: number;
+  outputToken: number;
+  model: string;
+}
+
+interface OpenRouterUsageTracker {
+  calls: OpenRouterCallUsage[];
+  total: Pick<OpenRouterCallUsage, 'cost' | 'inputToken' | 'outputToken' | 'model'>;
+}
+
+type ScanCardOpenRouterPayload = FullScanCardPayload & {
+  cost: number;
+  inputToken: number;
+  outputToken: number;
+  model: string;
+  openRouterCalls: OpenRouterCallUsage[];
+};
+
 interface ScanCardOpenRouterResult {
   success: boolean;
   message: string;
-  data?: FullScanCardPayload;
+  data?: ScanCardOpenRouterPayload;
 }
 
 interface CurrencyConversionApiResponse {
@@ -733,7 +754,13 @@ export class CardNewService implements OnModuleInit {
       const extension = this.getFileExtension(filename);
       const base64Image = `data:image/${extension};base64,${imageBuffer.toString('base64')}`;
       const currentDate = this.shiftDate(0);
-      const identity = await this.detectCardIdentity(base64Image);
+      const usageTracker = this.createOpenRouterUsageTracker(
+        this.getOpenRouterScanModel(),
+      );
+      const identity = await this.detectCardIdentity(
+        base64Image,
+        usageTracker,
+      );
 
       // Use English name for TCGPlayer/Cardmarket search (most reliable)
       const searchCardName = identity?.cardNameEn || identity?.cardName || '';
@@ -744,6 +771,7 @@ export class CardNewService implements OnModuleInit {
       let aiData = await this.generateAiFallbackCardData(
         base64Image,
         currentDate,
+        usageTracker,
       );
 
       // Retry once if AI failed
@@ -756,6 +784,7 @@ export class CardNewService implements OnModuleInit {
         aiData = await this.generateAiFallbackCardData(
           base64Image,
           currentDate,
+          usageTracker,
         );
       }
 
@@ -789,7 +818,10 @@ export class CardNewService implements OnModuleInit {
       }
 
       // Dedicated OCR-style read for scan (separate from grade flow)
-      const textReadData = await this.extractScanTextData(base64Image);
+      const textReadData = await this.extractScanTextData(
+        base64Image,
+        usageTracker,
+      );
       aiData = this.mergeScanTextData(aiData, textReadData);
 
       // Scrape TCGPlayer ONLY for price data (history arrays, current price)
@@ -824,7 +856,11 @@ export class CardNewService implements OnModuleInit {
       return {
         success: true,
         message: 'Card scanned successfully',
-        data,
+        data: {
+          ...data,
+          ...usageTracker.total,
+          openRouterCalls: usageTracker.calls,
+        },
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -888,6 +924,62 @@ export class CardNewService implements OnModuleInit {
     }
   }
 
+  private getOpenRouterScanModel(): string {
+    return (
+      process.env.OPENROUTER_CARD_SCAN_MODEL || 'google/gemini-2.5-flash'
+    );
+  }
+
+  private createOpenRouterUsageTracker(
+    defaultModel: string,
+  ): OpenRouterUsageTracker {
+    return {
+      calls: [],
+      total: {
+        cost: 0,
+        inputToken: 0,
+        outputToken: 0,
+        model: defaultModel,
+      },
+    };
+  }
+
+  private extractOpenRouterCallUsage(
+    responseData: any,
+    step: string,
+    model: string,
+  ): OpenRouterCallUsage {
+    const usage = responseData?.usage;
+    const resolvedModel = responseData?.model || model;
+
+    return {
+      step,
+      cost: Number(usage?.cost ?? 0),
+      inputToken: Number(usage?.prompt_tokens ?? 0),
+      outputToken: Number(usage?.completion_tokens ?? 0),
+      model: resolvedModel,
+    };
+  }
+
+  private recordOpenRouterUsage(
+    tracker: OpenRouterUsageTracker,
+    responseData: any,
+    step: string,
+    model: string,
+  ): OpenRouterCallUsage {
+    const callUsage = this.extractOpenRouterCallUsage(
+      responseData,
+      step,
+      model,
+    );
+    tracker.calls.push(callUsage);
+    tracker.total.cost += callUsage.cost;
+    tracker.total.inputToken += callUsage.inputToken;
+    tracker.total.outputToken += callUsage.outputToken;
+    tracker.total.model = callUsage.model || tracker.total.model;
+    return callUsage;
+  }
+
   private async requestOpenRouterJson(
     prompt: string,
     schema: Record<string, any>,
@@ -898,15 +990,17 @@ export class CardNewService implements OnModuleInit {
       temperature?: number;
       maxTokens?: number;
       timeout?: number;
+      usageTracker?: OpenRouterUsageTracker;
     },
   ): Promise<Record<string, any> | null> {
+    const model =
+      options?.model ||
+      process.env.OPENROUTER_CARD_SCAN_MODEL ||
+      'google/gemini-2.5-flash';
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
-        model:
-          options?.model ||
-          process.env.OPENROUTER_CARD_SCAN_MODEL ||
-          'google/gemini-2.5-flash',
+        model,
         messages: [
           {
             role: 'user',
@@ -931,6 +1025,14 @@ export class CardNewService implements OnModuleInit {
       },
     );
 
+    if (options?.usageTracker) {
+      this.recordOpenRouterUsage(
+        options.usageTracker,
+        response?.data,
+        usageContext,
+        model,
+      );
+    }
     this.logOpenRouterUsage(response?.data, usageContext);
     const parsed = this.parseAiJson(
       response?.data?.choices?.[0]?.message?.content,
@@ -956,6 +1058,7 @@ export class CardNewService implements OnModuleInit {
     schema: Record<string, any>,
     base64Image: string,
     usageContext: string,
+    usageTracker?: OpenRouterUsageTracker,
   ): Promise<Record<string, any> | null> {
     return this.requestOpenRouterJson(
       prompt,
@@ -963,11 +1066,11 @@ export class CardNewService implements OnModuleInit {
       base64Image,
       usageContext,
       {
-        model:
-          process.env.OPENROUTER_CARD_SCAN_MODEL || 'google/gemini-2.5-flash',
+        model: this.getOpenRouterScanModel(),
         temperature: 0.2,
         maxTokens: 8192,
         timeout: 45000,
+        usageTracker,
       },
     );
   }
@@ -997,6 +1100,7 @@ export class CardNewService implements OnModuleInit {
 
   private async detectCardIdentity(
     base64Image: string,
+    usageTracker?: OpenRouterUsageTracker,
   ): Promise<Record<string, any> | null> {
     try {
       return await this.requestOpenRouterJsonForScan(
@@ -1004,6 +1108,7 @@ export class CardNewService implements OnModuleInit {
         cardIdentitySchema,
         base64Image,
         'card-new.detect-card-identity',
+        usageTracker,
       );
     } catch (error) {
       this.logger.warn(
@@ -1042,6 +1147,7 @@ export class CardNewService implements OnModuleInit {
   private async generateAiFallbackCardData(
     base64Image: string,
     currentDate: string,
+    usageTracker?: OpenRouterUsageTracker,
   ): Promise<Record<string, any> | null> {
     try {
       const result = await this.requestOpenRouterJsonForScan(
@@ -1049,6 +1155,7 @@ export class CardNewService implements OnModuleInit {
         fullCardScanSchema,
         base64Image,
         'card-new.ai-fallback-full-scan',
+        usageTracker,
       );
       if (result) {
         this.logger.log(
@@ -1066,6 +1173,7 @@ export class CardNewService implements OnModuleInit {
 
   private async extractScanTextData(
     base64Image: string,
+    usageTracker?: OpenRouterUsageTracker,
   ): Promise<Record<string, any> | null> {
     try {
       const result = await this.requestOpenRouterJsonForScan(
@@ -1073,6 +1181,7 @@ export class CardNewService implements OnModuleInit {
         scanTextReadSchema,
         base64Image,
         'card-new.scan-text-read',
+        usageTracker,
       );
 
       if (result) {
@@ -4069,7 +4178,6 @@ export class CardNewService implements OnModuleInit {
 
   private logOpenRouterUsage(responseData: any, context: string): void {
     const usage = responseData?.usage;
-    const cost = usage?.cost;
 
     if (!usage) {
       this.logger.warn(
@@ -4078,8 +4186,9 @@ export class CardNewService implements OnModuleInit {
       return;
     }
 
-    void context;
-    void cost;
+    this.logger.log(
+      `[${context}] OpenRouter usage | cost=${Number(usage.cost ?? 0)} | inputToken=${Number(usage.prompt_tokens ?? 0)} | outputToken=${Number(usage.completion_tokens ?? 0)} | model=${responseData?.model || 'unknown'}`,
+    );
   }
 
   // ══════════════════════════════════════════════════════════════════════════════

@@ -17,7 +17,7 @@ describe('PokemonCardController', () => {
       switchToHttp: () => ({
         getResponse: () => ({ statusCode: 200 }),
         getRequest: () => ({
-          url: '/pokemon/trending?period=week&direction=both&minChangePercent=5&limit=20',
+          url: '/easy-card-scanner/catalog/cards/trending?period=week&direction=both&minChangePercent=5&limit=20',
         }),
       }),
       getHandler: () => controller.getTrendingCards,
@@ -43,7 +43,7 @@ describe('PokemonCardController', () => {
     jest.clearAllMocks();
   });
 
-  it('returns /pokemon/trending with only one response envelope level', async () => {
+  it('returns /easy-card-scanner/catalog/cards/trending with only one response envelope level', async () => {
     pokemonCardService.getTrendingCards.mockResolvedValue({
       period: 'week',
       direction: 'both',

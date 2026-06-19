@@ -24,9 +24,9 @@ curl --location 'https://scan-cards-backend.vercel.app/error' \
   --header 'Accept: application/json'
 ```
 
-## Card New
+## Easy Card Scanner
 
-### POST `/card-new/scan-card`
+### POST `/easy-card-scanner/cards/scans`
 
 Multipart form-data.
 
@@ -35,13 +35,13 @@ Fields:
 - `language`: optional language code, for example `en`, `vi`, `ja`, `fr`.
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/scan-card' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards/scans' \
   --header 'Accept: application/json' \
   --form 'image=@"/absolute/path/to/card.jpg"' \
   --form 'language="en"'
 ```
 
-### GET `/card-new/get-all`
+### GET `/easy-card-scanner/cards`
 
 Query:
 - `type`: optional, `all | pokemon | yugioh | soccer`; default `all`.
@@ -49,32 +49,32 @@ Query:
 - `limit`: optional. Default `20` when pagination is enabled.
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/get-all?type=all&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards?type=all&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
 Pokemon only:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/get-all?type=pokemon&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards?type=pokemon&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
 Yugioh only:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/get-all?type=yugioh&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards?type=yugioh&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
 Soccer only:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/get-all?type=soccer&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards?type=soccer&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
-### GET `/card-new/search`
+### GET `/easy-card-scanner/cards/search`
 
 Query:
 - `type`: required, `pokemon | yugioh | soccer`.
@@ -83,21 +83,21 @@ Query:
 - `limit`: optional. Default `20` when pagination is enabled.
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/search?type=pokemon&search=charizard&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards/search?type=pokemon&search=charizard&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/search?type=yugioh&search=dark%20magician&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards/search?type=yugioh&search=dark%20magician&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/search?type=soccer&search=messi&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards/search?type=soccer&search=messi&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
-### POST `/card-new/convert-currency`
+### POST `/easy-card-scanner/cards/currency-conversions`
 
 JSON body:
 - `base`: required source currency.
@@ -105,7 +105,7 @@ JSON body:
 - `data`: required full card response payload. Send the full object returned by scan/search if you want all nested price fields converted.
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/convert-currency' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards/currency-conversions' \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
   --data '{
@@ -129,7 +129,7 @@ curl --location 'https://scan-cards-backend.vercel.app/card-new/convert-currency
   }'
 ```
 
-### POST `/card-new/grade-card`
+### POST `/easy-card-scanner/cards/grades`
 
 Multipart form-data.
 
@@ -138,7 +138,7 @@ Fields:
 - `language`: optional language code, for example `en`, `vi`, `ja`, `fr`.
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/card-new/grade-card' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/cards/grades' \
   --header 'Accept: application/json' \
   --form 'image=@"/absolute/path/to/card.jpg"' \
   --form 'language="en"'
@@ -186,11 +186,11 @@ curl --location 'https://scan-cards-backend.vercel.app/card-scanner/scan-title-o
   --form 'image=@"/absolute/path/to/card.jpg"'
 ```
 
-## Pokemon / Sport Catalog
+## Easy Card Scanner - Catalog
 
-These routes are exposed at root because `PokemonCardController` uses `@Controller("")`.
+Browse and search the shared card catalog (pokemon, sport, and related categories).
 
-### GET `/search`
+### GET `/easy-card-scanner/catalog/cards/search`
 
 Query:
 - `categories`: required, `pokemon | sport`.
@@ -206,25 +206,25 @@ Query:
 Pokemon search:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/search?categories=pokemon&search=charizard&page=1&limit=20&type=Fire&weakness=Water&rarity=Rare%20Holo&category=Base%20Set&priceMin=10&priceMax=100&sort=price_desc' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards/search?categories=pokemon&search=charizard&page=1&limit=20&type=Fire&weakness=Water&rarity=Rare%20Holo&category=Base%20Set&priceMin=10&priceMax=100&sort=price_desc' \
   --header 'Accept: application/json'
 ```
 
 Pokemon search with repeated filters:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/search?categories=pokemon&search=pikachu&page=1&limit=20&type=Lightning&type=Colorless&rarity=Rare&rarity=Promo&category=Scarlet%20%26%20Violet&category=Promo&priceRange=10_50&sort=name_asc' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards/search?categories=pokemon&search=pikachu&page=1&limit=20&type=Lightning&type=Colorless&rarity=Rare&rarity=Promo&category=Scarlet%20%26%20Violet&category=Promo&priceRange=10_50&sort=name_asc' \
   --header 'Accept: application/json'
 ```
 
 Sport search:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/search?categories=sport&search=jordan&page=1&limit=20&sport=basketball&category=Prizm&priceRange=over_100&sort=price_desc' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards/search?categories=sport&search=jordan&page=1&limit=20&sport=basketball&category=Prizm&priceRange=over_100&sort=price_desc' \
   --header 'Accept: application/json'
 ```
 
-### GET `/get-all`
+### GET `/easy-card-scanner/catalog/cards`
 
 Query:
 - `categories`: required, `pokemon | sport`.
@@ -235,32 +235,32 @@ Query:
 Pokemon:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/get-all?categories=pokemon&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards?categories=pokemon&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
 Sport all:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/get-all?categories=sport&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards?categories=sport&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
 Sport filtered:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/get-all?categories=sport&sport=basketball&page=1&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards?categories=sport&sport=basketball&page=1&limit=20' \
   --header 'Accept: application/json'
 ```
 
-### GET `/pokemon-stats`
+### GET `/easy-card-scanner/catalog/stats`
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/pokemon-stats' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/stats' \
   --header 'Accept: application/json'
 ```
 
-### GET `/pokemon/trending`
+### GET `/easy-card-scanner/catalog/cards/trending`
 
 Query:
 - `period`: optional, `today | week | month`; default `week`.
@@ -269,18 +269,18 @@ Query:
 - `limit`: optional number; default `20`, max `100`.
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/pokemon/trending?period=week&direction=both&minChangePercent=5&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards/trending?period=week&direction=both&minChangePercent=5&limit=20' \
   --header 'Accept: application/json'
 ```
 
 Only upward movers:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/pokemon/trending?period=month&direction=up&minChangePercent=10&limit=50' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards/trending?period=month&direction=up&minChangePercent=10&limit=50' \
   --header 'Accept: application/json'
 ```
 
-### GET `/pokemon/top-movers`
+### GET `/easy-card-scanner/catalog/cards/top-movers`
 
 Query:
 - `period`: optional, `today | week | month`; default `today`.
@@ -288,14 +288,14 @@ Query:
 - `limit`: optional number; default `10`, max `100`.
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/pokemon/top-movers?period=today&direction=gainers&limit=10' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards/top-movers?period=today&direction=gainers&limit=10' \
   --header 'Accept: application/json'
 ```
 
 Losers:
 
 ```bash
-curl --location 'https://scan-cards-backend.vercel.app/pokemon/top-movers?period=week&direction=losers&limit=20' \
+curl --location 'https://scan-cards-backend.vercel.app/easy-card-scanner/catalog/cards/top-movers?period=week&direction=losers&limit=20' \
   --header 'Accept: application/json'
 ```
 

@@ -13,25 +13,46 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBody,
   ApiConsumes,
+  ApiExcludeEndpoint,
   ApiOperation,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { CardNewService } from './card-new.service';
 import { ResponseMessage } from '../../decorators/response-message.decorator';
+import { SCAN_CARD_SUCCESS_EXAMPLE } from '../../common/swagger/api-envelope.examples';
+import {
+  ApiWrappedErrorResponse,
+  ApiWrappedInternalServerErrorResponse,
+  ApiWrappedOkResponse,
+} from '../../common/swagger/api-standard-responses.decorator';
 
-
-@ApiTags('card-new')
-@Controller('card-new')
+@ApiTags('Easy Card Scanner')
+@Controller('easy-card-scanner/cards')
 export class CardNewController {
   constructor(private readonly cardNewService: CardNewService) {}
 
-  @Post('scan-card')
+  @Post('scans')
   @ApiOperation({
     summary: 'Scan card image with OpenRouter and return full card JSON',
     description:
-      'Upload a card image and analyze it with OpenRouter vision, returning the full normalized card payload.',
+      'Upload a card image and analyze it with OpenRouter vision, returning the full normalized card payload. On success, the response also includes OpenRouter usage totals (cost, inputToken, outputToken, model) and openRouterCalls with per-step breakdown.',
   })
+  @ApiWrappedOkResponse({
+    description: 'Card scanned successfully',
+    example: SCAN_CARD_SUCCESS_EXAMPLE,
+  })
+  @ApiWrappedErrorResponse({
+    status: 400,
+    message: 'Image file must be provided',
+  })
+  @ApiWrappedErrorResponse({
+    status: 422,
+    message: 'Could not scan card from image',
+  })
+  @ApiWrappedInternalServerErrorResponse(
+    'Internal server error while scanning card',
+  )
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -44,7 +65,8 @@ export class CardNewController {
         },
         language: {
           type: 'string',
-          description: 'Optional language code for translated text fields (vi, en, ja, fr, ...)',
+          description:
+            'Optional language code for translated text fields (vi, en, ja, fr, ...)',
         },
       },
       required: ['image'],
@@ -79,9 +101,10 @@ export class CardNewController {
     return result.data;
   }
 
-  @Get('get-all')
+  @Get()
+  @ApiExcludeEndpoint()
   @ApiOperation({
-    summary: 'Get cards from pokemon, yugioh, soccer or all categories',
+    summary: 'List cards from pokemon, yugioh, soccer or all categories',
   })
   @ApiQuery({
     name: 'type',
@@ -116,6 +139,7 @@ export class CardNewController {
   }
 
   @Get('search')
+  @ApiExcludeEndpoint()
   @ApiOperation({
     summary: 'Search cards in one category file',
   })
@@ -158,7 +182,8 @@ export class CardNewController {
     });
   }
 
-  @Post('convert-currency')
+  @Post('currency-conversions')
+  @ApiExcludeEndpoint()
   @ApiOperation({
     summary: 'Convert all money fields in a full card payload',
     description:
@@ -200,7 +225,8 @@ export class CardNewController {
     return this.cardNewService.convertCurrencyPayload(data, base, target);
   }
 
-  @Post('grade-card')
+  @Post('grades')
+  @ApiExcludeEndpoint()
   @ApiOperation({
     summary: 'Grade a card image with PSA subgrades and estimate value',
     description:
@@ -218,7 +244,8 @@ export class CardNewController {
         },
         language: {
           type: 'string',
-          description: 'Optional language code for card identity detection (vi, en, ja, ...)',
+          description:
+            'Optional language code for card identity detection (vi, en, ja, ...)',
         },
       },
       required: ['image'],

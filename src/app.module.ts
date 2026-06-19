@@ -8,7 +8,6 @@ import { PokemonCardModule } from './modules/pokemon-card/pokemon-card.module';
 import { ArticleModule } from './modules/article/article.module';
 import { CardScannerModule } from './modules/card-scanner/card-scanner.module';
 import { AiChatModule } from './modules/ai-chat/ai-chat.module';
-import { CustomCardModule } from './modules/custom-card/custom-card.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { CardNewModule } from './modules/card-new/card-new.module';
@@ -24,7 +23,7 @@ import { ScanModule } from './modules/scan/scan.module';
     // UploadKeystoreModule,
     PokemonCardModule,
     ArticleModule,
-    CardScannerModule,
+    // CardScannerModule,
     // AiChatModule,
 
     ThrottlerModule.forRoot([
@@ -61,7 +60,6 @@ import { ScanModule } from './modules/scan/scan.module';
       },
       inject: [ConfigService],
     }),
-    // CustomCardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

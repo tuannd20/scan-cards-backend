@@ -4,7 +4,7 @@ import { ResponseInterceptor } from './response.interceptor';
 
 describe('ResponseInterceptor', () => {
   const createContext = (
-    url = '/pokemon/trending?period=week&direction=both&minChangePercent=5&limit=20',
+    url = '/easy-card-scanner/catalog/cards/trending?period=week&direction=both&minChangePercent=5&limit=20',
     statusCode = 200,
   ): ExecutionContext =>
     ({
@@ -44,7 +44,7 @@ describe('ResponseInterceptor', () => {
     const interceptor = createInterceptor();
     const payload = {
       status: true,
-      path: '/pokemon/trending?period=week&direction=both&limit=20',
+      path: '/easy-card-scanner/catalog/cards/trending?period=week&direction=both&limit=20',
       message: 'success',
       statusCode: 200,
       data: {
