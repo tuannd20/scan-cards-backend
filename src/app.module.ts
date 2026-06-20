@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UploadKeystoreModule } from './modules/upload-keystore/upload-keystore.module';
 import { PokemonCardModule } from './modules/pokemon-card/pokemon-card.module';
 import { ArticleModule } from './modules/article/article.module';
 import { CardScannerModule } from './modules/card-scanner/card-scanner.module';
@@ -20,7 +19,6 @@ import { ScanModule } from './modules/scan/scan.module';
     }),
     CardNewModule,
     // ScanModule,
-    // UploadKeystoreModule,
     PokemonCardModule,
     ArticleModule,
     // CardScannerModule,
