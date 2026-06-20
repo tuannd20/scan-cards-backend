@@ -61,7 +61,7 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 all-sport-cards.json
-
-# Sport card data (do not commit)
+uploaded-type-icons.json
 sport-cards/*
 !sport-cards/.gitkeep
+theme.txt
